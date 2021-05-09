@@ -10,10 +10,12 @@ import java.util.function.Function;
 import org.jetbrains.annotations.NotNull;
 import org.vadere.meshing.mesh.gen.PMesh;
 import org.vadere.meshing.mesh.inter.IMesh;
+import org.vadere.simulator.models.groups.sir.SIRType;
 import org.vadere.state.scenario.Agent;
 import org.vadere.state.scenario.Pedestrian;
 import org.vadere.util.geometry.shapes.IPoint;
 import org.vadere.util.geometry.shapes.VRectangle;
+import org.vadere.simulator.models.groups.sir.SIRGroupModel;
 
 public abstract class SimulationModel<T extends DefaultSimulationConfig> extends DefaultModel {
 
@@ -101,13 +103,28 @@ public abstract class SimulationModel<T extends DefaultSimulationConfig> extends
 
 	public Color getGroupColor(@NotNull final  Pedestrian ped) {
 		if (ped.getGroupIds().isEmpty() || (!ped.getGroupSizes().isEmpty() && ped.getGroupSizes().getFirst() == 1)) {
-			return config.getPedestrianDefaultColor();
+			return Color.GREEN;
 		}
 
 		int groupId = ped.getGroupIds().getFirst();
 		Color c = colorMap.get(groupId);
 		if (c == null) {
-			c = new Color(Color.HSBtoRGB(random.nextFloat(), 1f, 0.75f));
+			//c = new Color(Color.HSBtoRGB(random.nextFloat(), 1f, 0.75f));
+
+			if(ped.getGroupIds() == null || ped.getGroupIds().getFirst()==null){
+				c = Color.BLACK;
+			}else {
+				if (ped.getGroupIds().getFirst() == SIRType.ID_INFECTED.ordinal()) {
+					c = Color.RED;
+				}
+				if (ped.getGroupIds().getFirst() == SIRType.ID_SUSCEPTIBLE.ordinal()) {
+					c = Color.BLACK;
+				}
+//				if (ped.getGroupIds().getFirst() == SIRType.ID_RECOVERED.ordinal()) {
+//					c = Color.WHITE;
+//				}
+			}
+
 			colorMap.put(groupId, c);
 		}
 		return c;

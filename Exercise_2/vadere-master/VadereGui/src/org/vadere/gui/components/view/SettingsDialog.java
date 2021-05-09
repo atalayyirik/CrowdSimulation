@@ -233,8 +233,8 @@ public class SettingsDialog extends JDialog {
 		JRadioButton rbGroupColoring = createRadioButtonWithListener(AgentColoring.GROUP, Messages.getString("SettingsDialog.chbGroupColors.text"));
 		JRadioButton rbSelfCategoryColoring = createRadioButtonWithListener(AgentColoring.SELF_CATEGORY, Messages.getString("SettingsDialog.lblSelfCategoryColoring.text")+ ":");
 
-		rbTargetColoring.setSelected(true);
-		model.setAgentColoring(AgentColoring.TARGET);
+		rbGroupColoring.setSelected(true);
+		model.setAgentColoring(AgentColoring.GROUP);
 
 		group = new ButtonGroup();
 		group.add(rbTargetColoring);
