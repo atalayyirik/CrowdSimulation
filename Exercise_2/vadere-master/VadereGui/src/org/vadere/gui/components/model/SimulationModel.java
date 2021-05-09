@@ -120,9 +120,9 @@ public abstract class SimulationModel<T extends DefaultSimulationConfig> extends
 				if (ped.getGroupIds().getFirst() == SIRType.ID_SUSCEPTIBLE.ordinal()) {
 					c = Color.BLACK;
 				}
-//				if (ped.getGroupIds().getFirst() == SIRType.ID_RECOVERED.ordinal()) {
-//					c = Color.WHITE;
-//				}
+				if (ped.getGroupIds().getFirst() == SIRType.ID_RECOVERED.ordinal()) {
+					c = Color.YELLOW;
+				}
 			}
 
 			colorMap.put(groupId, c);

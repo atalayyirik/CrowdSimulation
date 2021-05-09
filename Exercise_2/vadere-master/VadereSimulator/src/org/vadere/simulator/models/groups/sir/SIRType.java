@@ -4,5 +4,6 @@ public enum SIRType
 {
     ID_INFECTED,
     ID_SUSCEPTIBLE,
+    ID_RECOVERED,
     ID_REMOVED
 }

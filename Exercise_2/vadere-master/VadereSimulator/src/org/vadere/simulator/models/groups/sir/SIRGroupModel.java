@@ -214,21 +214,32 @@ public class SIRGroupModel extends AbstractGroupModel<SIRGroup> {
 			}
 			for(Pedestrian p : c.getElements()) {
 				// loop over neighbors and set infected if we are close
-//				System.out.println("AA");
-//				System.out.println(cellsGrid.getObjects(p.getPosition(),1.0).size());
-//				System.out.println(c.getElements().size());
-				for(Pedestrian p_neighbor : cellsGrid.getObjects(p.getPosition(),1.0)){
-				//for(Pedestrian p_neighbor : c.getElements()) {
-					if(p == p_neighbor || getGroup(p_neighbor).getID() != SIRType.ID_INFECTED.ordinal())
+				SIRGroup g = getGroup(p);
+				if(g.getID() == SIRType.ID_RECOVERED.ordinal()){
+					continue;
+				}
+				if(g.getID()==SIRType.ID_INFECTED.ordinal()){
+					if(this.random.nextDouble()<attributesSIRG.getRecoveryRate()){
+						elementRemoved(p);
+						assignToGroup(p, SIRType.ID_RECOVERED.ordinal());
 						continue;
-					double dist = p.getPosition().distance(p_neighbor.getPosition());
-					if (dist < attributesSIRG.getInfectionMaxDistance() &&
-							this.random.nextDouble() < attributesSIRG.getInfectionRate()) {
-						SIRGroup g = getGroup(p);
-						if (g.getID() == SIRType.ID_SUSCEPTIBLE.ordinal()) {
-							elementRemoved(p);
-							assignToGroup(p, SIRType.ID_INFECTED.ordinal());
-						}
+					}
+				}
+				for(Pedestrian p_neighbor : cellsGrid.getObjects(p.getPosition(),attributesSIRG.getInfectionMaxDistance())){
+//					if(p == p_neighbor || getGroup(p_neighbor).getID() != SIRType.ID_INFECTED.ordinal())
+//						continue;
+					//double dist = p.getPosition().distance(p_neighbor.getPosition());
+//					if (dist < attributesSIRG.getInfectionMaxDistance() &&
+//							this.random.nextDouble() < attributesSIRG.getInfectionRate()) {
+//						if (g.getID() == SIRType.ID_SUSCEPTIBLE.ordinal()) {
+//							elementRemoved(p);
+//							assignToGroup(p, SIRType.ID_INFECTED.ordinal());
+//						}
+//					}
+					if (p != p_neighbor && getGroup(p_neighbor).getID() == SIRType.ID_INFECTED.ordinal() &&
+							g.getID() == SIRType.ID_SUSCEPTIBLE.ordinal() && this.random.nextDouble() < attributesSIRG.getInfectionRate()) {
+						elementRemoved(p);
+						assignToGroup(p, SIRType.ID_INFECTED.ordinal());
 					}
 				}
 			}
