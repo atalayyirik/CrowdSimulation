@@ -209,39 +209,31 @@ public class SIRGroupModel extends AbstractGroupModel<SIRGroup> {
 
 
 		if (c.getElements().size() > 0) {
+			//Adding elements to LinkedCellsGrid
 			for(Pedestrian p: c.getElements()){
 				cellsGrid.addObject(p);
 			}
 			for(Pedestrian p : c.getElements()) {
 				// loop over neighbors and set infected if we are close
 				SIRGroup g = getGroup(p);
-				if(g.getID() == SIRType.ID_RECOVERED.ordinal()){
-					continue;
-				}
 				if(g.getID()==SIRType.ID_INFECTED.ordinal()){
 					if(this.random.nextDouble()<attributesSIRG.getRecoveryRate()){
 						elementRemoved(p);
 						assignToGroup(p, SIRType.ID_RECOVERED.ordinal());
-						continue;
 					}
 				}
-				for(Pedestrian p_neighbor : cellsGrid.getObjects(p.getPosition(),attributesSIRG.getInfectionMaxDistance())){
-//					if(p == p_neighbor || getGroup(p_neighbor).getID() != SIRType.ID_INFECTED.ordinal())
-//						continue;
-					//double dist = p.getPosition().distance(p_neighbor.getPosition());
-//					if (dist < attributesSIRG.getInfectionMaxDistance() &&
-//							this.random.nextDouble() < attributesSIRG.getInfectionRate()) {
-//						if (g.getID() == SIRType.ID_SUSCEPTIBLE.ordinal()) {
-//							elementRemoved(p);
-//							assignToGroup(p, SIRType.ID_INFECTED.ordinal());
-//						}
-//					}
-					if (p != p_neighbor && getGroup(p_neighbor).getID() == SIRType.ID_INFECTED.ordinal() &&
-							g.getID() == SIRType.ID_SUSCEPTIBLE.ordinal() && this.random.nextDouble() < attributesSIRG.getInfectionRate()) {
-						elementRemoved(p);
-						assignToGroup(p, SIRType.ID_INFECTED.ordinal());
+				if(g.getID() == SIRType.ID_SUSCEPTIBLE.ordinal()){
+					for(Pedestrian p_neighbor : cellsGrid.getObjects(p.getPosition(),attributesSIRG.getInfectionMaxDistance())){
+						if (p != p_neighbor && getGroup(p_neighbor).getID() == SIRType.ID_INFECTED.ordinal()){
+							if(this.random.nextDouble() < attributesSIRG.getInfectionRate()) {
+								elementRemoved(p);
+								assignToGroup(p, SIRType.ID_INFECTED.ordinal());
+							}
+						}
 					}
+
 				}
+
 			}
 		}
 		this.currentSimulationInSeconds = simTimeInSec;
