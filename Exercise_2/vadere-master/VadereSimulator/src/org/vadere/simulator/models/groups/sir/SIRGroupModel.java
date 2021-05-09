@@ -204,6 +204,7 @@ public class SIRGroupModel extends AbstractGroupModel<SIRGroup> {
 				topography.getAttributes().getBounds().getHeight(),
 				1000);
 
+
 		if (c.getElements().size() > 0) {
 			for(Pedestrian p: c.getElements()){
 				cellsGrid.addObject(p);
