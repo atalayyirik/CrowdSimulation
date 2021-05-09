@@ -196,7 +196,10 @@ public class SIRGroupModel extends AbstractGroupModel<SIRGroup> {
 	@Override
 	public void update(final double simTimeInSec) {
 		// check the positions of all pedestrians and switch groups to INFECTED (or REMOVED).
-
+		double stepTimeInSeconds = simTimeInSec - this.currentSimulationInSeconds;
+		if(stepTimeInSeconds < 1.0){
+			return;
+		}
 		DynamicElementContainer<Pedestrian> c = topography.getPedestrianDynamicElements();
 		LinkedCellsGrid<Pedestrian> cellsGrid = new LinkedCellsGrid(topography.getAttributes().getBounds().x,
 				topography.getAttributes().getBounds().y,
@@ -230,5 +233,6 @@ public class SIRGroupModel extends AbstractGroupModel<SIRGroup> {
 				}
 			}
 		}
+		this.currentSimulationInSeconds = simTimeInSec;
 	}
 }
